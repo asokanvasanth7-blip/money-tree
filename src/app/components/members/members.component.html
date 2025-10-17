@@ -1,0 +1,130 @@
+<div class="members-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>👥 Members & Loans</h1>
+      <p class="subtitle">Manage member accounts and loan tracking</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-export" (click)="exportAllMembers()" title="Export all members to PDF">
+        <span class="export-icon">📄</span>
+        Export All PDF
+      </button>
+      <button class="btn-add">
+        <span class="plus-icon">+</span>
+        Add Member
+      </button>
+    </div>
+  </header>
+
+  <div class="search-container">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by name or account number..."
+        [(ngModel)]="searchTerm"
+      />
+      @if (searchTerm) {
+        <button class="clear-btn" (click)="searchTerm = ''">✕</button>
+      }
+    </div>
+  </div>
+
+  <div class="members-grid">
+    @if (members$ | async; as members) {
+      @if (filterMembers(members).length === 0 && searchTerm) {
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3>No members found</h3>
+          <p>Try searching with a different name or account number</p>
+          <button class="btn-primary" (click)="searchTerm = ''">Clear Search</button>
+        </div>
+      } @else if (filterMembers(members).length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <h3>No members yet</h3>
+          <p>Start by adding your first member</p>
+          <button class="btn-primary">Add First Member</button>
+        </div>
+      } @else {
+        @for (member of filterMembers(members); track member.accountNumber) {
+          <div class="member-card">
+            <div class="card-top">
+              <div class="card-icon">
+                <div class="icon-circle">
+                  {{ getInitials(member.name) }}
+                </div>
+              </div>
+              <div class="card-title-section">
+                <h3 class="card-title">{{ member.name }}</h3>
+                <p class="card-subtitle">
+                  <span class="account-icon">💳</span> Account {{ member.accountNumber }}
+                </p>
+              </div>
+              <div class="credit-badge">
+                <span class="badge-label">CREDIT</span>
+                <span class="badge-amount">₹{{ member.totalBalance | number:'1.0-0' }}</span>
+              </div>
+            </div>
+
+            <div class="card-stats-grid">
+              <div class="stat-box">
+                <div class="stat-icon">📈</div>
+                <div class="stat-content">
+                  <div class="stat-label">Principal</div>
+                  <div class="stat-value">₹{{ member.principal | number:'1.0-0' }}</div>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-icon">💰</div>
+                <div class="stat-content">
+                  <div class="stat-label">Loan Taken</div>
+                  <div class="stat-value">₹{{member.loanTaken | number:'1.0-0' }}</div>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-icon">📅</div>
+                <div class="stat-content">
+                  <div class="stat-label">Monthly Due</div>
+                  <div class="stat-value">₹{{ member.monthlyDue | number:'1.0-0' }}</div>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                  <div class="stat-label">Total Due</div>
+                  <div [class]="'stat-value ' + getTotalDueClass(member)">₹{{ getTotalDue(member) | number:'1.0-0' }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <div class="progress-info">
+                <span class="progress-label">Payment Progress</span>
+                <span class="progress-percentage">{{ getProgressPercentage(member) | number:'1.0-0' }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgressPercentage(member)"></div>
+              </div>
+              <div class="card-actions">
+                <button class="btn-export-single" (click)="exportSingleMember(member)" title="Export this member's invoice">
+                  <span class="export-icon">📄</span>
+                  Export PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    } @else {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading members...</p>
+      </div>
+    }
+  </div>
+</div>

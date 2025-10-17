@@ -1,0 +1,66 @@
+<div class="register-container">
+  <div class="register-card">
+    <h1>Register</h1>
+    <p class="subtitle">Create your Money Tree account</p>
+
+    @if (errorMessage()) {
+      <div class="error-message">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+          placeholder="Enter your email"
+          required
+          [disabled]="isLoading()"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          placeholder="Enter your password (min 6 characters)"
+          required
+          [disabled]="isLoading()"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          [value]="confirmPassword()"
+          (input)="confirmPassword.set($any($event.target).value)"
+          placeholder="Confirm your password"
+          required
+          [disabled]="isLoading()"
+        />
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <span>Creating account...</span>
+        } @else {
+          <span>Register</span>
+        }
+      </button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a routerLink="/login">Login here</a>
+    </div>
+  </div>
+</div>
+

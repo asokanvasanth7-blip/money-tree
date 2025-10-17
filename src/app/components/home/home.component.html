@@ -1,0 +1,43 @@
+<div class="home-container">
+  <header class="header">
+    <div class="header-content">
+      <h1>💰 Money Tree</h1>
+      @if (user$ | async; as user) {
+        <div class="user-info">
+          <span class="user-email">{{ user.email }}</span>
+          <button class="btn-logout" (click)="logout()">Logout</button>
+        </div>
+      }
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="welcome-card">
+      <h2>Welcome to Money Tree! 🌳</h2>
+      @if (user$ | async; as user) {
+        <p>You are successfully logged in as <strong>{{ user.email }}</strong></p>
+      }
+      <p class="info-text">
+        Your Firebase Authentication is working perfectly! You can now start building your money management features.
+      </p>
+
+      <div class="features">
+        <h3>What's Next?</h3>
+        <ul>
+          <li>✅ Firebase Authentication is configured</li>
+          <li>✅ Login and Register pages are ready</li>
+          <li>✅ Auth Guard protects your routes</li>
+          <li>✅ Firestore database is ready to use</li>
+        </ul>
+      </div>
+
+      <div class="quick-actions">
+        <a href="/members" class="action-card">
+          <div class="action-icon">👥</div>
+          <h4>View Members</h4>
+          <p>Manage your team members</p>
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
