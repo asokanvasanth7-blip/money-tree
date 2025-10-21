@@ -88,4 +88,9 @@ export class MembersComponent implements OnInit {
     if (totalBalance < 5000) return 'status-low';
     return 'status-active';
   }
+
+  getRandomHeight(): number {
+    // Generate random heights between 20% and 100% for chart bars
+    return Math.floor(Math.random() * 80) + 20;
+  }
 }

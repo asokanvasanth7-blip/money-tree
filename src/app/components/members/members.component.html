@@ -50,72 +50,68 @@
       } @else {
         @for (member of filterMembers(members); track member.accountNumber) {
           <div class="member-card">
-            <div class="card-top">
-              <div class="card-icon">
-                <div class="icon-circle">
+            <!-- Card Header with Avatar and Name -->
+            <div class="card-header">
+              <div class="member-avatar">
+                <div class="avatar-circle">
                   {{ getInitials(member.name) }}
                 </div>
               </div>
-              <div class="card-title-section">
-                <h3 class="card-title">{{ member.name }}</h3>
-                <p class="card-subtitle">
-                  <span class="account-icon">💳</span> Account {{ member.accountNumber }}
-                </p>
-              </div>
-              <div class="credit-badge">
-                <span class="badge-label">CREDIT</span>
-                <span class="badge-amount">₹{{ member.totalBalance | number:'1.0-0' }}</span>
+              <div class="member-info-header">
+                <h2 class="member-name">{{ member.name }}</h2>
+                <span class="verified-badge">
+                  <span class="check-icon">✓</span>
+                  Active
+                </span>
               </div>
             </div>
 
-            <div class="card-stats-grid">
-              <div class="stat-box">
-                <div class="stat-icon">📈</div>
-                <div class="stat-content">
-                  <div class="stat-label">Principal</div>
-                  <div class="stat-value">₹{{ member.principal | number:'1.0-0' }}</div>
+            <!-- Projects Section -->
+            <div class="projects-section">
+              <h3 class="section-title">Financial Summary</h3>
+              <div class="projects-grid">
+                <div class="project-item">
+                  <div class="project-icon ongoing">⏱</div>
+                  <div class="project-label">Principal</div>
+                  <div class="project-count">₹{{ (member.principal / 1000).toFixed(1) }}k</div>
                 </div>
-              </div>
-
-              <div class="stat-box">
-                <div class="stat-icon">💰</div>
-                <div class="stat-content">
-                  <div class="stat-label">Loan Taken</div>
-                  <div class="stat-value">₹{{member.loanTaken | number:'1.0-0' }}</div>
-                </div>
-              </div>
-
-              <div class="stat-box">
-                <div class="stat-icon">📅</div>
-                <div class="stat-content">
-                  <div class="stat-label">Monthly Due</div>
-                  <div class="stat-value">₹{{ member.monthlyDue | number:'1.0-0' }}</div>
-                </div>
-              </div>
-
-              <div class="stat-box">
-                <div class="stat-icon">✅</div>
-                <div class="stat-content">
-                  <div class="stat-label">Total Due</div>
-                  <div [class]="'stat-value ' + getTotalDueClass(member)">₹{{ getTotalDue(member) | number:'1.0-0' }}</div>
+                <div class="project-item">
+                  <div class="project-icon completed">✓</div>
+                  <div class="project-label">Upcoming Due</div>
+                  <div class="project-count">₹{{ (member.loanTaken).toFixed(1) }}k</div>
                 </div>
               </div>
             </div>
 
-            <div class="card-footer">
-              <div class="progress-info">
-                <span class="progress-label">Payment Progress</span>
-                <span class="progress-percentage">{{ getProgressPercentage(member) | number:'1.0-0' }}%</span>
+            <!-- Details Grid -->
+            <div class="details-grid">
+              <div class="detail-row">
+                <span class="detail-label">Account</span>
+                <span class="detail-value">{{ member.accountNumber.toString().padStart(4, '0') }}</span>
               </div>
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="getProgressPercentage(member)"></div>
+              <div class="detail-row">
+                <span class="detail-label">Loan Taken</span>
+                <span class="detail-value loan-value">₹{{ member.loanTaken | number:'1.0-0' }}</span>
               </div>
-              <div class="card-actions">
-                <button class="btn-export-single" (click)="exportSingleMember(member)" title="Export this member's invoice">
-                  <span class="export-icon">📄</span>
-                  Export PDF
-                </button>
+              <div class="detail-row">
+                <span class="detail-label">Monthly Due</span>
+                <span class="detail-value">₹{{ member.monthlyDue | number:'1.0-0' }}</span>
               </div>
+              <div class="detail-row">
+                <span class="detail-label">Balance</span>
+                <span class="detail-value balance-value">₹{{ member.totalBalance | number:'1.0-0' }}</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+              <button class="btn-more" title="More options">
+                <span class="dots-icon">⋮</span>
+              </button>
+              <button class="btn-primary-action" (click)="exportSingleMember(member)">
+                <span class="message-icon">📄</span>
+                Export PDF
+              </button>
             </div>
           </div>
         }
